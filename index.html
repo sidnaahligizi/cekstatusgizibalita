@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Gizi SIDNA</title>
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --bg-gradient: linear-gradient(180deg, #1976d2 0%, #64b5f6 100%);
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo-container img {
+            width: 120px;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        h2 { text-align: center; margin-bottom: 5px; font-size: 24px;}
+        .subtitle { text-align: center; margin-bottom: 25px; font-size: 14px; opacity: 0.9;}
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+        .form-group input::placeholder { color: rgba(255, 255, 255, 0.7); }
+        .form-group input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+        .form-group option { color: black; }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background-color: #fbc02d;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+        .btn-submit:active { transform: scale(0.98); }
+        .btn-submit:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        /* Result Card Styles */
+        .result-card {
+            display: none;
+            background: white;
+            color: #333;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .badge-gizi {
+            background: #4caf50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        .metrics { font-size: 18px; font-weight: bold; color: #fbc02d; margin: 10px 0; }
+        
+        .btn-wa {
+            background-color: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin-top: 15px;
+            text-decoration: none;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            opacity: 0.8;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        #loading { display: none; text-align: center; margin-top: 10px; font-weight: bold;}
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="logo-container">
+        <img src="logo_sidna.png" alt="SIDNA Ahli Gizi Logo" onerror="this.src='https://via.placeholder.com/120?text=SIDNA'">
+    </div>
+
+    <div id="formSection">
+        <h2>Cek Status Gizi</h2>
+        <div class="subtitle">= Semua Umur =</div>
+
+        <div class="form-group">
+            <input type="text" id="nama" placeholder="Nama Lengkap" required>
+        </div>
+        <div class="form-group">
+            <select id="gender">
+                <option value="" disabled selected>Jenis Kelamin</option>
+                <option value="L">Laki-laki</option>
+                <option value="P">Perempuan</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="date" id="tglLahir" required>
+        </div>
+        <div class="form-group">
+            <input type="number" id="tinggi" placeholder="Tinggi Badan (cm) co: 130.5" step="0.1" required>
+        </div>
+        <div class="form-group">
+            <input type="number" id="berat" placeholder="Berat Badan (kg) co: 30.2" step="0.1" required>
+        </div>
+
+        <button class="btn-submit" id="btnCek" onclick="hitungGizi()">C E K</button>
+        <div id="loading">Memproses data... Mohon tunggu.</div>
+    </div>
+
+    <div id="resultSection" class="result-card">
+        <h3 id="resNama" style="margin: 0;">Nama</h3>
+        <div id="resUmur" style="font-size: 14px; color: #666; margin-bottom: 10px;"></div>
+        
+        <div class="badge-gizi" id="resStatus">Gizi Baik</div>
+        
+        <div class="metrics">
+            <span id="resTinggi">0</span> cm | <span id="resBerat">0</span> kg
+        </div>
+        
+        <hr style="border: 0.5px solid #eee; margin: 15px 0;">
+        
+        <div style="text-align: left; font-size: 14px; line-height: 1.6;">
+            <strong>Hasil Pengukuran WHO 2020:</strong><br>
+            • Berat/Umur (BB/U): <span id="resBBU">...</span><br>
+            • Tinggi/Umur (TB/U): <span id="resTBU">...</span><br>
+            • Berat/Tinggi (BB/TB): <span id="resBBTB">...</span>
+        </div>
+        
+        <p style="font-size: 14px; margin-top: 15px;"><strong>Saran:</strong> <br><span id="resSaran">...</span></p>
+
+        <button class="btn-wa" onclick="bagikanWA()">
+            <span>Bagikan ke WhatsApp</span>
+        </button>
+        
+        <button onclick="resetForm()" style="background:none; border:none; color:#1a73e8; margin-top:15px; cursor:pointer; text-decoration:underline;">Cek Lagi</button>
+    </div>
+
+    <div class="footer">
+        sidnaahligizi
+    </div>
+</div>
+
+<script>
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-XKBBIJR-DJ3p9vXmXlZNN9mlbLE4chXVqeJgxAMNLZ1RdTEGnVajW_A0j-smvKFs/exec"; // Masukkan URL Web App di sini
+
+    function hitungGizi() {
+        const nama = document.getElementById('nama').value;
+        const gender = document.getElementById('gender').value;
+        const tglLahir = document.getElementById('tglLahir').value;
+        const tinggi = document.getElementById('tinggi').value;
+        const berat = document.getElementById('berat').value;
+
+        if(!nama || !gender || !tglLahir || !tinggi || !berat) {
+            alert("Mohon lengkapi semua data!");
+            return;
+        }
+
+        // Tampilkan loading, matikan tombol (mencegah double submit/crash)
+        document.getElementById('btnCek').disabled = true;
+        document.getElementById('loading').style.display = "block";
+
+        const payload = {
+            nama: nama,
+            gender: gender,
+            tglLahir: tglLahir,
+            tinggi: tinggi,
+            berat: berat
+        };
+
+        fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('loading').style.display = "none";
+            document.getElementById('btnCek').disabled = false;
+
+            if(data.status === "success") {
+                tampilkanHasil(payload, data.data);
+            } else {
+                alert("Terjadi kesalahan: " + data.message);
+            }
+        })
+        .catch(error => {
+            document.getElementById('loading').style.display = "none";
+            document.getElementById('btnCek').disabled = false;
+            alert("Gagal terhubung ke server. Pastikan koneksi internet stabil.");
+            console.error(error);
+        });
+    }
+
+    function tampilkanHasil(input, hasil) {
+        // Pindah frame dari Form ke Result tanpa reload
+        document.getElementById('formSection').style.display = 'none';
+        document.getElementById('resultSection').style.display = 'block';
+
+        const tahun = Math.floor(hasil.umurBulan / 12);
+        const bulan = hasil.umurBulan % 12;
+
+        document.getElementById('resNama').innerText = input.nama;
+        document.getElementById('resUmur').innerText = `= ${tahun} tahun ${bulan} bulan =`;
+        document.getElementById('resTinggi').innerText = input.tinggi;
+        document.getElementById('resBerat').innerText = input.berat;
+        
+        document.getElementById('resBBU').innerText = hasil.bbu;
+        document.getElementById('resTBU').innerText = hasil.tbu;
+        document.getElementById('resBBTB').innerText = hasil.bbtb;
+        document.getElementById('resStatus').innerText = hasil.bbtb; // Highlight status utama
+        document.getElementById('resSaran').innerText = hasil.saran;
+    }
+
+    function bagikanWA() {
+        const nama = document.getElementById('resNama').innerText;
+        const umur = document.getElementById('resUmur').innerText.replace(/=/g, '').trim();
+        const tb = document.getElementById('resTinggi').innerText;
+        const bb = document.getElementById('resBerat').innerText;
+        const bbu = document.getElementById('resBBU').innerText;
+        const tbu = document.getElementById('resTBU').innerText;
+        const bbtb = document.getElementById('resBBTB').innerText;
+
+        const pesan = `*Laporan Status Gizi SIDNA*\n\nNama: ${nama}\nUmur: ${umur}\nTB: ${tb} cm | BB: ${bb} kg\n\n*Hasil Pengukuran (WHO)*:\n- BB/U: ${bbu}\n- TB/U: ${tbu}\n- BB/TB: ${bbtb}\n\n_sidnaahligizi_`;
+        
+        const waUrl = `https://wa.me/?text=${encodeURIComponent(pesan)}`;
+        window.open(waUrl, '_blank');
+    }
+
+    function resetForm() {
+        document.getElementById('formSection').style.display = 'block';
+        document.getElementById('resultSection').style.display = 'none';
+        // Opsional: document.getElementById('nama').value = ''; (jika ingin form kosong saat kembali)
+    }
+</script>
+
+</body>
+</html>
