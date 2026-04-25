@@ -2,196 +2,256 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1976d2">
     <title>Kalkulator Gizi SIDNA</title>
     <link rel="icon" type="image/png" href="logo_sidna.png">
     
     <style>
         :root {
             --primary: #1a73e8;
-            --bg-gradient: linear-gradient(180deg, #1976d2 0%, #64b5f6 100%);
+            --bg-gradient: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+            --text-dark: #333;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0; padding: 20px 10px; background: var(--bg-gradient);
-            min-height: 100vh; display: flex; justify-content: center; align-items: flex-start;
-            color: white; box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0; padding: 0; 
+            background: #e3f2fd;
+            min-height: 100vh; 
+            display: flex; justify-content: center; align-items: flex-start;
         }
-        .app-container {
-            width: 100%; max-width: 400px; padding: 20px; box-sizing: border-box;
-            background: rgba(255, 255, 255, 0.05); border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); backdrop-filter: blur(10px);
+        /* Mobile Wrapper Simulator */
+        .mobile-wrapper {
+            width: 100%; max-width: 480px; min-height: 100vh;
+            background: var(--bg-gradient); color: white;
+            padding: 25px 20px; box-sizing: border-box;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative; overflow-x: hidden;
         }
+        
         .logo-container { text-align: center; margin-bottom: 20px; }
         .logo-container img {
-            width: 100px; border-radius: 50%; border: 4px solid white; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 90px; height: 90px; object-fit: cover;
+            border-radius: 50%; border: 3px solid white; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            background-color: white;
         }
-        h2 { text-align: center; margin-bottom: 5px; font-size: 24px;}
-        .subtitle { text-align: center; margin-bottom: 25px; font-size: 14px; opacity: 0.9;}
+        h2 { text-align: center; margin-bottom: 5px; font-size: 22px; font-weight: 700; letter-spacing: 0.5px;}
+        .subtitle { text-align: center; margin-bottom: 25px; font-size: 13px; opacity: 0.9; font-weight: 500;}
+        
+        /* Halaman Edukasi (Info Cards) */
+        .info-card { 
+            background: white; border-radius: 12px; padding: 18px; 
+            margin-bottom: 15px; color: var(--text-dark);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .info-card h3 { 
+            color: var(--primary); font-size: 16px; margin: 0 0 10px 0; 
+            display: flex; align-items: center; gap: 8px;
+        }
+        .info-card p { font-size: 13.5px; line-height: 1.6; margin: 0 0 10px 0; text-align: justify;}
+        .info-card p:last-child { margin-bottom: 0; }
+        .info-list { font-size: 13.5px; margin: 0; padding-left: 20px; line-height: 1.6;}
         
         /* Form Styles */
         .form-group {
-            margin-bottom: 15px; background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 8px; padding: 5px 15px;
+            margin-bottom: 15px; background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 10px; 
+            padding: 2px 15px; display: flex; align-items: center; transition: 0.3s;
         }
+        .form-group:focus-within { background: rgba(255, 255, 255, 0.25); border-color: white; }
+        /* Font-size 16px wajib agar iOS tidak auto-zoom */
         .form-group input, .form-group select {
-            width: 100%; padding: 10px; background: transparent;
+            width: 100%; padding: 12px 0; background: transparent;
             border: none; color: white; font-size: 16px; outline: none; box-sizing: border-box;
         }
-        .form-group input::placeholder { color: rgba(255, 255, 255, 0.7); }
-        .form-group input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+        .form-group input::placeholder { color: rgba(255, 255, 255, 0.8); }
+        .form-group input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer;}
         .form-group option { color: black; }
         
+        /* Buttons */
         .btn-submit {
-            width: 100%; padding: 15px; background-color: #fbc02d; color: #000;
-            border: none; border-radius: 8px; font-size: 18px; font-weight: bold;
-            cursor: pointer; margin-top: 15px; transition: 0.3s;
+            width: 100%; padding: 16px; background-color: #fbc02d; color: #000;
+            border: none; border-radius: 10px; font-size: 16px; font-weight: 800;
+            cursor: pointer; margin-top: 10px; transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-transform: uppercase; letter-spacing: 1px;
         }
-        .btn-submit:disabled { background-color: #999; cursor: not-allowed; }
+        .btn-submit:active { transform: translateY(2px); box-shadow: none; }
+        .btn-submit:disabled { background-color: #e0e0e0; color: #9e9e9e; cursor: not-allowed; }
 
-        .result-card, .info-card {
-            background: white; color: #333;
-            border-radius: 15px; padding: 20px; text-align: center;
+        .btn-outline {
+            background: none; border: 1px solid white; color: white; width: 100%;
+            padding: 12px; border-radius: 10px; margin-top: 15px; cursor: pointer;
+            font-size: 14px; transition: 0.3s;
         }
-        .info-card { margin-bottom: 20px; text-align: left; font-size: 14px; line-height: 1.6; }
-        .metrics { font-size: 18px; font-weight: bold; color: #1a73e8; margin: 10px 0; }
+        .btn-outline:active { background: rgba(255,255,255,0.1); }
+
+        /* Result Card */
+        .result-card {
+            background: white; color: var(--text-dark);
+            border-radius: 15px; padding: 25px 20px; text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15); margin-top: 10px;
+        }
+        .metrics { font-size: 20px; font-weight: 900; color: var(--primary); margin: 15px 0; }
+        .metrics span { font-size: 24px; }
         
         .btn-wa {
-            background-color: #25D366; color: white; padding: 10px 20px;
-            border: none; border-radius: 8px; font-size: 16px; font-weight: bold;
-            cursor: pointer; width: 100%; margin-top: 15px;
+            background-color: #25D366; color: white; padding: 14px 20px;
+            border: none; border-radius: 10px; font-size: 15px; font-weight: bold;
+            cursor: pointer; width: 100%; margin-top: 20px; display: flex;
+            justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3);
         }
-        #loading { display: none; text-align: center; margin-top: 10px; font-weight: bold; color: #fff;}
+
+        #loading { display: none; text-align: center; margin-top: 15px; font-weight: 600; color: #fff; font-size: 14px;}
         
         /* Dynamic Status Colors */
-        .status-box { text-align: left; font-size: 14px; line-height: 1.6; background: #f8f9fa; padding: 12px; border-radius: 8px; }
+        .status-box { text-align: left; font-size: 14px; line-height: 1.6; background: #f1f8e9; padding: 15px; border-radius: 10px; border: 1px solid #c5e1a5;}
         .status-normal { color: #2e7d32; font-weight: bold; }
-        .status-warning { color: #f57c00; font-weight: bold; }
+        .status-warning { color: #e65100; font-weight: bold; }
         .status-danger { color: #c62828; font-weight: bold; }
 
         /* Custom Notification (Toast) */
         #toast {
-            visibility: hidden; min-width: 250px; margin-left: -125px;
-            background-color: #333; color: #fff; text-align: center;
-            border-radius: 8px; padding: 16px; position: fixed; z-index: 9999;
-            left: 50%; bottom: 30px; font-size: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            visibility: hidden; min-width: 280px; max-width: 90%; margin-left: -140px;
+            background-color: #323232; color: #fff; text-align: center;
+            border-radius: 30px; padding: 12px 16px; position: fixed; z-index: 9999;
+            left: 50%; bottom: 40px; font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            font-weight: 500;
         }
-        #toast.show {
-            visibility: visible;
-            animation: fadein 0.5s, fadeout 0.5s 2.5s;
-        }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        #toast.show { visibility: visible; animation: fadein 0.4s, fadeout 0.4s 2.6s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 40px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 40px; opacity: 1;} to {bottom: 0; opacity: 0;} }
 
         /* Chart Graphic CSS */
         .chart-container {
-            width: 100%; height: 120px; background: #e3f2fd; border-radius: 8px;
-            position: relative; margin: 15px 0; overflow: hidden;
+            width: 100%; height: 100px; background: #e3f2fd; border-radius: 8px;
+            position: relative; margin-top: 15px; overflow: hidden;
             border-bottom: 2px solid #90caf9; border-left: 2px solid #90caf9;
         }
         .chart-curve {
             position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to top right, transparent 50%, rgba(76, 175, 80, 0.2) 50%);
+            background: linear-gradient(to top right, transparent 50%, rgba(76, 175, 80, 0.15) 50%);
             border-top: 3px solid #4caf50; border-radius: 0 100% 0 0;
         }
         .chart-dot {
-            width: 12px; height: 12px; background: #fbc02d; border-radius: 50%;
-            position: absolute; right: 20%; top: 30%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            width: 10px; height: 10px; background: #1a73e8; border-radius: 50%;
+            position: absolute; right: 25%; top: 35%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        .chart-label { position: absolute; right: 5%; top: 10%; font-size: 10px; font-weight: bold; color: #2e7d32;}
+        .chart-label { position: absolute; right: 5%; bottom: 10%; font-size: 10px; font-weight: bold; color: #1a73e8;}
 
+        .footer { text-align: center; margin-top: 40px; font-size: 12px; font-weight: 600; opacity: 0.8; letter-spacing: 1px;}
     </style>
 </head>
 <body>
 
-<div class="app-container">
+<div class="mobile-wrapper">
     <div class="logo-container">
-        <img src="logo_sidna.png" alt="SIDNA" onerror="this.src='https://via.placeholder.com/100?text=SIDNA'">
+        <img src="logo_sidna.png" alt="SIDNA Ahli Gizi" onerror="this.src='https://lh3.googleusercontent.com/d/1hGSRD5dNVoF7TKUgF7nAZVqQ6wXFI3wj'">
     </div>
 
     <div id="landingSection">
         <h2>Kalkulator Gizi SIDNA</h2>
-        <div class="subtitle">Deteksi Dini Status Gizi Anak</div>
+        <div class="subtitle">Deteksi Dini & Pemantauan Tumbuh Kembang</div>
         
         <div class="info-card">
-            <h3 style="margin-top: 0; color: #1a73e8;">Pentingnya Gizi Balita</h3>
-            <p>Masa balita (terutama 1000 Hari Pertama Kehidupan) adalah *golden age* atau masa keemasan pertumbuhan otak dan fisik anak.</p>
-            <p>Pemantauan gizi secara rutin penting untuk mencegah <strong>Stunting</strong> (gagal tumbuh), gizi buruk, maupun obesitas sejak dini.</p>
-            
+            <h3>👶 Pentingnya 1000 HPK</h3>
+            <p>1000 Hari Pertama Kehidupan (sejak dalam kandungan hingga anak usia 2 tahun) adalah masa emas <i>(golden age)</i>. Nutrisi yang tepat di masa ini adalah fondasi utama kecerdasan otak dan kekebalan tubuh anak seumur hidup.</p>
+        </div>
+
+        <div class="info-card">
+            <h3>⚠️ Cegah Stunting Sejak Dini</h3>
+            <p>Stunting bukan sekadar pendek, melainkan <b>gagal tumbuh</b> akibat kurang gizi kronis atau infeksi berulang. Pemantauan berat dan tinggi badan secara berkala adalah kunci pencegahannya.</p>
+        </div>
+
+        <div class="info-card">
+            <h3>📊 Standar Emas WHO 2020</h3>
+            <p>Aplikasi SIDNA menggunakan parameter <b>LMS WHO 2020</b> untuk memastikan akurasi deteksi gizi anak (0-5 tahun) melalui perhitungan Z-Score:</p>
+            <ul class="info-list">
+                <li><b>BB/U:</b> Berat Badan menurut Umur</li>
+                <li><b>TB/U:</b> Tinggi Badan menurut Umur</li>
+            </ul>
             <div class="chart-container">
                 <div class="chart-curve"></div>
                 <div class="chart-dot"></div>
-                <div class="chart-label">Jalur Pertumbuhan Normal</div>
+                <div class="chart-label">Jalur Tumbuh Normal</div>
             </div>
-            
-            <p style="font-size: 12px; color: #666;">*Aplikasi ini menggunakan standar baku emas WHO Anthro 2020 untuk akurasi medis.</p>
         </div>
 
-        <button class="btn-submit" onclick="switchView('formSection')">Mulai Cek Gizi</button>
+        <button class="btn-submit" onclick="switchView('formSection')">CEK GIZI SEKARANG</button>
     </div>
 
     <div id="formSection" style="display: none;">
-        <h2>Form Pengukuran</h2>
-        <div class="subtitle">= Sesuai Standar WHO =</div>
+        <h2>Form Antropometri</h2>
+        <div class="subtitle">Silakan isi data anak dengan akurat</div>
 
-        <div class="form-group"><input type="text" id="nama" placeholder="Nama Lengkap" required></div>
+        <div class="form-group"><input type="text" id="nama" placeholder="Nama Lengkap Anak" autocomplete="off" required></div>
         <div class="form-group">
-            <select id="gender">
-                <option value="" disabled selected>Jenis Kelamin</option>
+            <select id="gender" required>
+                <option value="" disabled selected>Pilih Jenis Kelamin</option>
                 <option value="L">Laki-laki</option>
                 <option value="P">Perempuan</option>
             </select>
         </div>
-        <div class="form-group"><input type="date" id="tglLahir" required></div>
-        <div class="form-group"><input type="number" id="tinggi" placeholder="Tinggi Badan (cm)" step="0.1" required></div>
-        <div class="form-group"><input type="number" id="berat" placeholder="Berat Badan (kg)" step="0.1" required></div>
+        <div class="form-group"><input type="date" id="tglLahir" required title="Tanggal Lahir"></div>
+        <div class="form-group"><input type="number" id="tinggi" placeholder="Tinggi/Panjang Badan (cm)" step="0.1" inputmode="decimal" required></div>
+        <div class="form-group"><input type="number" id="berat" placeholder="Berat Badan (kg)" step="0.1" inputmode="decimal" required></div>
 
-        <button class="btn-submit" id="btnCek" onclick="hitungGizi()">ANALISIS DATA</button>
-        <button onclick="switchView('landingSection')" style="background:none; border:none; color:white; width: 100%; margin-top:10px; cursor:pointer; text-decoration:underline;">Kembali ke Beranda</button>
-        <div id="loading">Menganalisis data di server...</div>
+        <button class="btn-submit" id="btnCek" onclick="hitungGizi()">PROSES ANALISIS</button>
+        <button class="btn-outline" onclick="switchView('landingSection')">Kembali ke Beranda</button>
+        
+        <div id="loading">📡 Menganalisis data di server WHO...</div>
     </div>
 
     <div id="resultSection" class="result-card" style="display: none;">
-        <h3 id="resNama" style="margin: 0;">Nama</h3>
-        <div id="resUmur" style="font-size: 14px; color: #666; margin-bottom: 10px;"></div>
+        <h3 id="resNama" style="margin: 0; font-size: 20px; color: #1976d2;">Nama Anak</h3>
+        <div id="resUmur" style="font-size: 14px; color: #757575; margin-top: 5px; margin-bottom: 15px; font-weight: 500;"></div>
         
-        <div class="metrics"><span id="resTinggi">0</span> cm | <span id="resBerat">0</span> kg</div>
+        <hr style="border: 0.5px solid #eee;">
+
+        <div class="metrics"><span id="resTinggi">0</span> cm <span style="color:#bdbdbd; font-weight:400; font-size:20px;">|</span> <span id="resBerat">0</span> kg</div>
         
         <div class="status-box">
-            <strong>Indikator Z-Score:</strong><br>
-            • Berat/Umur: <span id="resBBU">...</span> <br> 
-              <span id="statBBU" style="padding-left: 10px; display:block; margin-bottom: 5px;"></span>
-            • Tinggi/Umur: <span id="resTBU">...</span> <br> 
-              <span id="statTBU" style="padding-left: 10px; display:block;"></span>
+            <strong style="color: #2e7d32; display: block; border-bottom: 1px solid #c5e1a5; padding-bottom: 8px; margin-bottom: 10px;">Indikator Status Gizi (Z-Score)</strong>
+            <div style="margin-bottom: 8px;">
+                • Berat Badan (BB/U): <b id="resBBU">...</b> <br> 
+                <span id="statBBU" style="padding-left: 10px; display:block; margin-top: 2px;"></span>
+            </div>
+            <div>
+                • Tinggi Badan (TB/U): <b id="resTBU">...</b> <br> 
+                <span id="statTBU" style="padding-left: 10px; display:block; margin-top: 2px;"></span>
+            </div>
         </div>
         
-        <p style="font-size: 14px; margin-top: 15px;"><strong>Saran:</strong> <br><span id="resSaran">...</span></p>
+        <div style="background: #fff3e0; border: 1px solid #ffcc80; padding: 12px; border-radius: 10px; margin-top: 15px; text-align: left; font-size: 13.5px; line-height: 1.5;">
+            <strong style="color: #e65100;">Rekomendasi Ahli Gizi:</strong> <br><span id="resSaran">...</span>
+        </div>
 
-        <button class="btn-wa" onclick="bagikanWA()">Bagikan ke WhatsApp</button>
-        <button onclick="switchView('formSection')" style="background:none; border:none; color:#1a73e8; margin-top:15px; cursor:pointer; text-decoration:underline;">Hitung Ulang</button>
+        <button class="btn-wa" onclick="bagikanWA()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+            </svg>
+            Kirim ke WhatsApp
+        </button>
+        <button class="btn-outline" style="color: var(--primary); border-color: var(--primary);" onclick="switchView('formSection')">Hitung Data Lain</button>
     </div>
 
-    <div style="text-align: center; margin-top: 30px; font-size: 12px; font-weight: bold; opacity: 0.8;">
-        &copy; sidnaahligizi
+    <div class="footer">
+        &copy; sidnaahligizi | Belajar Inovasi
     </div>
 </div>
 
 <div id="toast">Pesan Notifikasi</div>
 
 <script>
-    // URL WEB APP APPS SCRIPT BAPAK
+    // URL WEB APP APPS SCRIPT BAPAK (TIDAK BERUBAH)
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-XKBBIJR-DJ3p9vXmXlZNN9mlbLE4chXVqeJgxAMNLZ1RdTEGnVajW_A0j-smvKFs/exec"; 
 
     // --- FITUR ANTI INSPECT / ANTI COPAS ---
-    document.addEventListener('contextmenu', event => event.preventDefault()); // Matikan Klik Kanan
+    document.addEventListener('contextmenu', event => event.preventDefault()); 
     document.onkeydown = function(e) {
-        // Matikan F12
         if(e.keyCode == 123) { return false; } 
-        // Matikan Ctrl+Shift+I
         if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; }
-        // Matikan Ctrl+Shift+J
         if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; }
-        // Matikan Ctrl+U (View Source)
         if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; }
     }
 
@@ -203,15 +263,17 @@
         setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
     }
 
-    // --- MANAJEMEN NAVIGASI SPA ---
+    // --- MANAJEMEN NAVIGASI SPA YANG KOKOH ---
     function switchView(viewId) {
         document.getElementById('landingSection').style.display = 'none';
         document.getElementById('formSection').style.display = 'none';
         document.getElementById('resultSection').style.display = 'none';
+        
         document.getElementById(viewId).style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Otomatis scroll ke atas saat ganti halaman
     }
 
-    // --- LOGIKA UTAMA ---
+    // --- LOGIKA UTAMA PENGIRIMAN DATA ---
     function hitungGizi() {
         const payload = {
             nama: document.getElementById('nama').value,
@@ -222,10 +284,11 @@
         };
 
         if(!payload.nama || !payload.gender || !payload.tglLahir || !payload.tinggi || !payload.berat) {
-            showToast("Harap isi semua kolom pengukuran!"); return;
+            showToast("⚠️ Harap lengkapi semua data pengukuran!"); return;
         }
 
         document.getElementById('btnCek').disabled = true;
+        document.getElementById('btnCek').innerText = "MEMPROSES...";
         document.getElementById('loading').style.display = "block";
 
         fetch(APPS_SCRIPT_URL, {
@@ -236,28 +299,37 @@
         .then(data => {
             document.getElementById('loading').style.display = "none";
             document.getElementById('btnCek').disabled = false;
+            document.getElementById('btnCek').innerText = "PROSES ANALISIS";
 
             if(data.status === "success") {
                 tampilkanHasil(payload, data.data);
-                showToast("Analisis Berhasil!");
+                showToast("✅ Analisis Berhasil!");
+                
+                // Opsional: Kosongkan form setelah sukses agar siap untuk data baru
+                document.getElementById('nama').value = '';
+                document.getElementById('tinggi').value = '';
+                document.getElementById('berat').value = '';
             } else {
-                showToast("Pesan Sistem: " + data.message); 
+                showToast("❌ Gagal: " + data.message); 
             }
         })
         .catch(error => {
             document.getElementById('loading').style.display = "none";
             document.getElementById('btnCek').disabled = false;
-            showToast("Koneksi gagal. Periksa jaringan Anda.");
+            document.getElementById('btnCek').innerText = "PROSES ANALISIS";
+            showToast("🌐 Koneksi gagal. Periksa jaringan internet Anda.");
         });
     }
 
+    // --- PENAMPILAN WARNA STATUS MEDIS ---
     function getColorClass(status) {
         let s = status.toLowerCase();
-        if(s.includes("normal")) return "status-normal";
-        if(s.includes("kurang") || s.includes("stunting") || s.includes("pendek") || s.includes("risiko")) return "status-danger";
+        if(s.includes("normal") || s.includes("baik")) return "status-normal";
+        if(s.includes("kurang") || s.includes("stunting") || s.includes("pendek") || s.includes("buruk") || s.includes("risiko")) return "status-danger";
         return "status-warning";
     }
 
+    // --- RENDER HASIL KE LAYAR ---
     function tampilkanHasil(input, hasil) {
         switchView('resultSection');
 
@@ -265,7 +337,7 @@
         const bulan = hasil.umurBulan % 12;
 
         document.getElementById('resNama').innerText = input.nama;
-        document.getElementById('resUmur').innerText = `= Umur: ${tahun} Tahun ${bulan} Bulan =`;
+        document.getElementById('resUmur').innerText = `Anak Usia: ${tahun} Tahun ${bulan} Bulan`;
         document.getElementById('resTinggi').innerText = input.tinggi;
         document.getElementById('resBerat').innerText = input.berat;
         
@@ -282,12 +354,14 @@
         document.getElementById('resSaran').innerText = hasil.saran;
     }
 
+    // --- INTEGRASI WHATSAPP ---
     function bagikanWA() {
         const nama = document.getElementById('resNama').innerText;
+        const umur = document.getElementById('resUmur').innerText;
         const bbu = document.getElementById('statBBU').innerText.replace("↳ ", "");
         const tbu = document.getElementById('statTBU').innerText.replace("↳ ", "");
         
-        const pesan = `*Laporan Status Gizi SIDNA*\n\nNama: ${nama}\n\n*Hasil Antropometri WHO*:\n- Berat Badan (BB/U): ${bbu}\n- Tinggi Badan (TB/U): ${tbu}\n\n_sidnaahligizi_`;
+        const pesan = `*Laporan Status Gizi SIDNA*\n\nNama: *${nama}*\n${umur}\n\n*Hasil Evaluasi WHO 2020*:\n- Berat Badan (BB/U): ${bbu}\n- Tinggi Badan (TB/U): ${tbu}\n\n_Pantau terus tumbuh kembang buah hati bersama SIDNA Ahli Gizi._`;
         window.open(`https://wa.me/?text=${encodeURIComponent(pesan)}`, '_blank');
     }
 </script>
