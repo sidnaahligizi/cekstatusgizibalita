@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Gizi SIDNA</title>
+    <link rel="icon" type="image/png" href="logo_sidna.png">
+    
     <style>
         :root {
             --primary: #1a73e8;
@@ -11,20 +13,23 @@
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0; padding: 0; background: var(--bg-gradient);
-            min-height: 100vh; display: flex; justify-content: center; align-items: center;
-            color: white;
+            margin: 0; padding: 20px 10px; background: var(--bg-gradient);
+            min-height: 100vh; display: flex; justify-content: center; align-items: flex-start;
+            color: white; box-sizing: border-box;
         }
         .app-container {
             width: 100%; max-width: 400px; padding: 20px; box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.05); border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); backdrop-filter: blur(10px);
         }
         .logo-container { text-align: center; margin-bottom: 20px; }
         .logo-container img {
-            width: 120px; border-radius: 50%; border: 4px solid white; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 100px; border-radius: 50%; border: 4px solid white; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
         h2 { text-align: center; margin-bottom: 5px; font-size: 24px;}
         .subtitle { text-align: center; margin-bottom: 25px; font-size: 14px; opacity: 0.9;}
         
+        /* Form Styles */
         .form-group {
             margin-bottom: 15px; background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 8px; padding: 5px 15px;
@@ -44,10 +49,11 @@
         }
         .btn-submit:disabled { background-color: #999; cursor: not-allowed; }
 
-        .result-card {
-            display: none; background: white; color: #333;
+        .result-card, .info-card {
+            background: white; color: #333;
             border-radius: 15px; padding: 20px; text-align: center;
         }
+        .info-card { margin-bottom: 20px; text-align: left; font-size: 14px; line-height: 1.6; }
         .metrics { font-size: 18px; font-weight: bold; color: #1a73e8; margin: 10px 0; }
         
         .btn-wa {
@@ -62,18 +68,71 @@
         .status-normal { color: #2e7d32; font-weight: bold; }
         .status-warning { color: #f57c00; font-weight: bold; }
         .status-danger { color: #c62828; font-weight: bold; }
+
+        /* Custom Notification (Toast) */
+        #toast {
+            visibility: hidden; min-width: 250px; margin-left: -125px;
+            background-color: #333; color: #fff; text-align: center;
+            border-radius: 8px; padding: 16px; position: fixed; z-index: 9999;
+            left: 50%; bottom: 30px; font-size: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
+        /* Chart Graphic CSS */
+        .chart-container {
+            width: 100%; height: 120px; background: #e3f2fd; border-radius: 8px;
+            position: relative; margin: 15px 0; overflow: hidden;
+            border-bottom: 2px solid #90caf9; border-left: 2px solid #90caf9;
+        }
+        .chart-curve {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top right, transparent 50%, rgba(76, 175, 80, 0.2) 50%);
+            border-top: 3px solid #4caf50; border-radius: 0 100% 0 0;
+        }
+        .chart-dot {
+            width: 12px; height: 12px; background: #fbc02d; border-radius: 50%;
+            position: absolute; right: 20%; top: 30%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .chart-label { position: absolute; right: 5%; top: 10%; font-size: 10px; font-weight: bold; color: #2e7d32;}
+
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <div class="logo-container">
-        <img src="logo_sidna.png" alt="SIDNA" onerror="this.src='https://lh3.googleusercontent.com/d/1hGSRD5dNVoF7TKUgF7nAZVqQ6wXFI3wj'">
+        <img src="logo_sidna.png" alt="SIDNA" onerror="this.src='https://via.placeholder.com/100?text=SIDNA'">
     </div>
 
-    <div id="formSection">
+    <div id="landingSection">
         <h2>Kalkulator Gizi SIDNA</h2>
-        <div class="subtitle">= WHO Anthro 2020 Validasi =</div>
+        <div class="subtitle">Deteksi Dini Status Gizi Anak</div>
+        
+        <div class="info-card">
+            <h3 style="margin-top: 0; color: #1a73e8;">Pentingnya Gizi Balita</h3>
+            <p>Masa balita (terutama 1000 Hari Pertama Kehidupan) adalah *golden age* atau masa keemasan pertumbuhan otak dan fisik anak.</p>
+            <p>Pemantauan gizi secara rutin penting untuk mencegah <strong>Stunting</strong> (gagal tumbuh), gizi buruk, maupun obesitas sejak dini.</p>
+            
+            <div class="chart-container">
+                <div class="chart-curve"></div>
+                <div class="chart-dot"></div>
+                <div class="chart-label">Jalur Pertumbuhan Normal</div>
+            </div>
+            
+            <p style="font-size: 12px; color: #666;">*Aplikasi ini menggunakan standar baku emas WHO Anthro 2020 untuk akurasi medis.</p>
+        </div>
+
+        <button class="btn-submit" onclick="switchView('formSection')">Mulai Cek Gizi</button>
+    </div>
+
+    <div id="formSection" style="display: none;">
+        <h2>Form Pengukuran</h2>
+        <div class="subtitle">= Sesuai Standar WHO =</div>
 
         <div class="form-group"><input type="text" id="nama" placeholder="Nama Lengkap" required></div>
         <div class="form-group">
@@ -87,18 +146,19 @@
         <div class="form-group"><input type="number" id="tinggi" placeholder="Tinggi Badan (cm)" step="0.1" required></div>
         <div class="form-group"><input type="number" id="berat" placeholder="Berat Badan (kg)" step="0.1" required></div>
 
-        <button class="btn-submit" id="btnCek" onclick="hitungGizi()">CEK STATUS GIZI</button>
-        <div id="loading">Menganalisis data dari server...</div>
+        <button class="btn-submit" id="btnCek" onclick="hitungGizi()">ANALISIS DATA</button>
+        <button onclick="switchView('landingSection')" style="background:none; border:none; color:white; width: 100%; margin-top:10px; cursor:pointer; text-decoration:underline;">Kembali ke Beranda</button>
+        <div id="loading">Menganalisis data di server...</div>
     </div>
 
-    <div id="resultSection" class="result-card">
+    <div id="resultSection" class="result-card" style="display: none;">
         <h3 id="resNama" style="margin: 0;">Nama</h3>
         <div id="resUmur" style="font-size: 14px; color: #666; margin-bottom: 10px;"></div>
         
         <div class="metrics"><span id="resTinggi">0</span> cm | <span id="resBerat">0</span> kg</div>
         
         <div class="status-box">
-            <strong>Indikator Z-Score (0-60 Bulan):</strong><br>
+            <strong>Indikator Z-Score:</strong><br>
             • Berat/Umur: <span id="resBBU">...</span> <br> 
               <span id="statBBU" style="padding-left: 10px; display:block; margin-bottom: 5px;"></span>
             • Tinggi/Umur: <span id="resTBU">...</span> <br> 
@@ -108,18 +168,50 @@
         <p style="font-size: 14px; margin-top: 15px;"><strong>Saran:</strong> <br><span id="resSaran">...</span></p>
 
         <button class="btn-wa" onclick="bagikanWA()">Bagikan ke WhatsApp</button>
-        <button onclick="resetForm()" style="background:none; border:none; color:#1a73e8; margin-top:15px; cursor:pointer; text-decoration:underline;">Hitung Ulang</button>
+        <button onclick="switchView('formSection')" style="background:none; border:none; color:#1a73e8; margin-top:15px; cursor:pointer; text-decoration:underline;">Hitung Ulang</button>
     </div>
 
     <div style="text-align: center; margin-top: 30px; font-size: 12px; font-weight: bold; opacity: 0.8;">
-        sidnaahligizi
+        &copy; sidnaahligizi
     </div>
 </div>
+
+<div id="toast">Pesan Notifikasi</div>
 
 <script>
     // URL WEB APP APPS SCRIPT BAPAK
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-XKBBIJR-DJ3p9vXmXlZNN9mlbLE4chXVqeJgxAMNLZ1RdTEGnVajW_A0j-smvKFs/exec"; 
 
+    // --- FITUR ANTI INSPECT / ANTI COPAS ---
+    document.addEventListener('contextmenu', event => event.preventDefault()); // Matikan Klik Kanan
+    document.onkeydown = function(e) {
+        // Matikan F12
+        if(e.keyCode == 123) { return false; } 
+        // Matikan Ctrl+Shift+I
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; }
+        // Matikan Ctrl+Shift+J
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; }
+        // Matikan Ctrl+U (View Source)
+        if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; }
+    }
+
+    // --- FITUR CUSTOM NOTIFICATION (TOAST) ---
+    function showToast(message) {
+        var x = document.getElementById("toast");
+        x.innerText = message;
+        x.className = "show";
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    }
+
+    // --- MANAJEMEN NAVIGASI SPA ---
+    function switchView(viewId) {
+        document.getElementById('landingSection').style.display = 'none';
+        document.getElementById('formSection').style.display = 'none';
+        document.getElementById('resultSection').style.display = 'none';
+        document.getElementById(viewId).style.display = 'block';
+    }
+
+    // --- LOGIKA UTAMA ---
     function hitungGizi() {
         const payload = {
             nama: document.getElementById('nama').value,
@@ -130,7 +222,7 @@
         };
 
         if(!payload.nama || !payload.gender || !payload.tglLahir || !payload.tinggi || !payload.berat) {
-            alert("Harap isi semua kolom pengukuran!"); return;
+            showToast("Harap isi semua kolom pengukuran!"); return;
         }
 
         document.getElementById('btnCek').disabled = true;
@@ -147,18 +239,18 @@
 
             if(data.status === "success") {
                 tampilkanHasil(payload, data.data);
+                showToast("Analisis Berhasil!");
             } else {
-                alert("Pesan Sistem: " + data.message); 
+                showToast("Pesan Sistem: " + data.message); 
             }
         })
         .catch(error => {
             document.getElementById('loading').style.display = "none";
             document.getElementById('btnCek').disabled = false;
-            alert("Koneksi gagal. Pastikan URL Web App sudah di-deploy dengan benar.");
+            showToast("Koneksi gagal. Periksa jaringan Anda.");
         });
     }
 
-    // Fungsi pewarnaan status agar menarik
     function getColorClass(status) {
         let s = status.toLowerCase();
         if(s.includes("normal")) return "status-normal";
@@ -167,8 +259,7 @@
     }
 
     function tampilkanHasil(input, hasil) {
-        document.getElementById('formSection').style.display = 'none';
-        document.getElementById('resultSection').style.display = 'block';
+        switchView('resultSection');
 
         const tahun = Math.floor(hasil.umurBulan / 12);
         const bulan = hasil.umurBulan % 12;
@@ -198,11 +289,6 @@
         
         const pesan = `*Laporan Status Gizi SIDNA*\n\nNama: ${nama}\n\n*Hasil Antropometri WHO*:\n- Berat Badan (BB/U): ${bbu}\n- Tinggi Badan (TB/U): ${tbu}\n\n_sidnaahligizi_`;
         window.open(`https://wa.me/?text=${encodeURIComponent(pesan)}`, '_blank');
-    }
-
-    function resetForm() {
-        document.getElementById('formSection').style.display = 'block';
-        document.getElementById('resultSection').style.display = 'none';
     }
 </script>
 
