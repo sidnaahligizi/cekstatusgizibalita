@@ -15,31 +15,24 @@
         }
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            margin: 0; padding: 0; 
-            background: #e3f2fd;
-            min-height: 100vh; 
+            margin: 0; padding: 0; background: #e3f2fd; min-height: 100vh; 
             display: flex; justify-content: center; align-items: flex-start;
         }
-        /* Mobile Wrapper Simulator */
         .mobile-wrapper {
             width: 100%; max-width: 480px; min-height: 100vh;
             background: var(--bg-gradient); color: white;
             padding: 25px 20px; box-sizing: border-box;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            position: relative; overflow-x: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1); position: relative; overflow-x: hidden;
         }
-        
         .logo-container { text-align: center; margin-bottom: 20px; }
         .logo-container img {
             width: 90px; height: 90px; object-fit: cover;
             border-radius: 50%; border: 3px solid white; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            background-color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); background-color: white;
         }
         h2 { text-align: center; margin-bottom: 5px; font-size: 22px; font-weight: 700; letter-spacing: 0.5px;}
         .subtitle { text-align: center; margin-bottom: 25px; font-size: 13px; opacity: 0.9; font-weight: 500;}
         
-        /* Halaman Edukasi (Info Cards) */
         .info-card { 
             background: white; border-radius: 12px; padding: 18px; 
             margin-bottom: 15px; color: var(--text-dark);
@@ -53,14 +46,12 @@
         .info-card p:last-child { margin-bottom: 0; }
         .info-list { font-size: 13.5px; margin: 0; padding-left: 20px; line-height: 1.6;}
         
-        /* Form Styles */
         .form-group {
             margin-bottom: 15px; background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 10px; 
             padding: 2px 15px; display: flex; align-items: center; transition: 0.3s;
         }
         .form-group:focus-within { background: rgba(255, 255, 255, 0.25); border-color: white; }
-        /* Font-size 16px wajib agar iOS tidak auto-zoom */
         .form-group input, .form-group select {
             width: 100%; padding: 12px 0; background: transparent;
             border: none; color: white; font-size: 16px; outline: none; box-sizing: border-box;
@@ -69,7 +60,6 @@
         .form-group input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer;}
         .form-group option { color: black; }
         
-        /* Buttons */
         .btn-submit {
             width: 100%; padding: 16px; background-color: #fbc02d; color: #000;
             border: none; border-radius: 10px; font-size: 16px; font-weight: 800;
@@ -86,7 +76,6 @@
         }
         .btn-outline:active { background: rgba(255,255,255,0.1); }
 
-        /* Result Card */
         .result-card {
             background: white; color: var(--text-dark);
             border-radius: 15px; padding: 25px 20px; text-align: center;
@@ -104,13 +93,11 @@
 
         #loading { display: none; text-align: center; margin-top: 15px; font-weight: 600; color: #fff; font-size: 14px;}
         
-        /* Dynamic Status Colors */
         .status-box { text-align: left; font-size: 14px; line-height: 1.6; background: #f1f8e9; padding: 15px; border-radius: 10px; border: 1px solid #c5e1a5;}
         .status-normal { color: #2e7d32; font-weight: bold; }
         .status-warning { color: #e65100; font-weight: bold; }
         .status-danger { color: #c62828; font-weight: bold; }
 
-        /* Custom Notification (Toast) */
         #toast {
             visibility: hidden; min-width: 280px; max-width: 90%; margin-left: -140px;
             background-color: #323232; color: #fff; text-align: center;
@@ -122,7 +109,6 @@
         @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 40px; opacity: 1;} }
         @keyframes fadeout { from {bottom: 40px; opacity: 1;} to {bottom: 0; opacity: 0;} }
 
-        /* Chart Graphic CSS */
         .chart-container {
             width: 100%; height: 100px; background: #e3f2fd; border-radius: 8px;
             position: relative; margin-top: 15px; overflow: hidden;
@@ -159,14 +145,15 @@
         </div>
 
         <div class="info-card">
-            <h3>⚠️ Cegah Stunting Sejak Dini</h3>
-            <p>Stunting bukan sekadar pendek, melainkan <b>gagal tumbuh</b> akibat kurang gizi kronis atau infeksi berulang. Pemantauan berat dan tinggi badan secara berkala adalah kunci pencegahannya.</p>
+            <h3>⚠️ Cegah Stunting & Gizi Buruk</h3>
+            <p>Stunting (gagal tumbuh) dan Gizi Buruk (wasted) dapat dicegah dengan deteksi dini. Pemantauan berat dan tinggi badan secara berkala sangat krusial.</p>
         </div>
 
         <div class="info-card">
             <h3>📊 Standar Emas WHO 2020</h3>
-            <p>Aplikasi SIDNA menggunakan parameter <b>LMS WHO 2020</b> untuk memastikan akurasi deteksi gizi anak (0-5 tahun) melalui perhitungan Z-Score:</p>
+            <p>Aplikasi SIDNA menggunakan parameter <b>LMS WHO</b> yang komprehensif:</p>
             <ul class="info-list">
+                <li><b>BB/TB:</b> Berat menurut Tinggi (Status Gizi Utama)</li>
                 <li><b>BB/U:</b> Berat Badan menurut Umur</li>
                 <li><b>TB/U:</b> Tinggi Badan menurut Umur</li>
             </ul>
@@ -211,13 +198,18 @@
         <div class="metrics"><span id="resTinggi">0</span> cm <span style="color:#bdbdbd; font-weight:400; font-size:20px;">|</span> <span id="resBerat">0</span> kg</div>
         
         <div class="status-box">
-            <strong style="color: #2e7d32; display: block; border-bottom: 1px solid #c5e1a5; padding-bottom: 8px; margin-bottom: 10px;">Indikator Status Gizi (Z-Score)</strong>
+            <strong style="color: #2e7d32; display: block; border-bottom: 1px solid #c5e1a5; padding-bottom: 8px; margin-bottom: 10px;">Indikator Status Gizi (WHO 2020)</strong>
+            
             <div style="margin-bottom: 8px;">
-                • Berat Badan (BB/U): <b id="resBBU">...</b> <br> 
+                • Berat Badan thd Tinggi (BB/TB): <b id="resBBTB">...</b> <br> 
+                <span id="statBBTB" style="padding-left: 10px; display:block; margin-top: 2px;"></span>
+            </div>
+            <div style="margin-bottom: 8px;">
+                • Berat Badan thd Umur (BB/U): <b id="resBBU">...</b> <br> 
                 <span id="statBBU" style="padding-left: 10px; display:block; margin-top: 2px;"></span>
             </div>
             <div>
-                • Tinggi Badan (TB/U): <b id="resTBU">...</b> <br> 
+                • Tinggi Badan thd Umur (TB/U): <b id="resTBU">...</b> <br> 
                 <span id="statTBU" style="padding-left: 10px; display:block; margin-top: 2px;"></span>
             </div>
         </div>
@@ -243,10 +235,9 @@
 <div id="toast">Pesan Notifikasi</div>
 
 <script>
-    // URL WEB APP APPS SCRIPT BAPAK (TIDAK BERUBAH)
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-XKBBIJR-DJ3p9vXmXlZNN9mlbLE4chXVqeJgxAMNLZ1RdTEGnVajW_A0j-smvKFs/exec"; 
 
-    // --- FITUR ANTI INSPECT / ANTI COPAS ---
+    // Fitur Keamanan Halaman
     document.addEventListener('contextmenu', event => event.preventDefault()); 
     document.onkeydown = function(e) {
         if(e.keyCode == 123) { return false; } 
@@ -255,7 +246,6 @@
         if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; }
     }
 
-    // --- FITUR CUSTOM NOTIFICATION (TOAST) ---
     function showToast(message) {
         var x = document.getElementById("toast");
         x.innerText = message;
@@ -263,17 +253,15 @@
         setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
     }
 
-    // --- MANAJEMEN NAVIGASI SPA YANG KOKOH ---
     function switchView(viewId) {
         document.getElementById('landingSection').style.display = 'none';
         document.getElementById('formSection').style.display = 'none';
         document.getElementById('resultSection').style.display = 'none';
         
         document.getElementById(viewId).style.display = 'block';
-        window.scrollTo({ top: 0, behavior: 'smooth' }); // Otomatis scroll ke atas saat ganti halaman
+        window.scrollTo({ top: 0, behavior: 'smooth' }); 
     }
 
-    // --- LOGIKA UTAMA PENGIRIMAN DATA ---
     function hitungGizi() {
         const payload = {
             nama: document.getElementById('nama').value,
@@ -304,11 +292,6 @@
             if(data.status === "success") {
                 tampilkanHasil(payload, data.data);
                 showToast("✅ Analisis Berhasil!");
-                
-                // Opsional: Kosongkan form setelah sukses agar siap untuk data baru
-                document.getElementById('nama').value = '';
-                document.getElementById('tinggi').value = '';
-                document.getElementById('berat').value = '';
             } else {
                 showToast("❌ Gagal: " + data.message); 
             }
@@ -321,7 +304,6 @@
         });
     }
 
-    // --- PENAMPILAN WARNA STATUS MEDIS ---
     function getColorClass(status) {
         let s = status.toLowerCase();
         if(s.includes("normal") || s.includes("baik")) return "status-normal";
@@ -329,7 +311,6 @@
         return "status-warning";
     }
 
-    // --- RENDER HASIL KE LAYAR ---
     function tampilkanHasil(input, hasil) {
         switchView('resultSection');
 
@@ -341,11 +322,19 @@
         document.getElementById('resTinggi').innerText = input.tinggi;
         document.getElementById('resBerat').innerText = input.berat;
         
+        // Render BB/TB
+        document.getElementById('resBBTB').innerText = (hasil.zBBTB !== null) ? hasil.zBBTB : "N/A";
+        let elemStatBBTB = document.getElementById('statBBTB');
+        elemStatBBTB.innerText = "↳ " + hasil.statBBTB;
+        elemStatBBTB.className = getColorClass(hasil.statBBTB);
+
+        // Render BB/U
         document.getElementById('resBBU').innerText = (hasil.zBBU !== null) ? hasil.zBBU : "N/A";
         let elemStatBBU = document.getElementById('statBBU');
         elemStatBBU.innerText = "↳ " + hasil.statBBU;
         elemStatBBU.className = getColorClass(hasil.statBBU);
         
+        // Render TB/U
         document.getElementById('resTBU').innerText = (hasil.zTBU !== null) ? hasil.zTBU : "N/A";
         let elemStatTBU = document.getElementById('statTBU');
         elemStatTBU.innerText = "↳ " + hasil.statTBU;
@@ -354,14 +343,14 @@
         document.getElementById('resSaran').innerText = hasil.saran;
     }
 
-    // --- INTEGRASI WHATSAPP ---
     function bagikanWA() {
         const nama = document.getElementById('resNama').innerText;
         const umur = document.getElementById('resUmur').innerText;
+        const bbtb = document.getElementById('statBBTB').innerText.replace("↳ ", "");
         const bbu = document.getElementById('statBBU').innerText.replace("↳ ", "");
         const tbu = document.getElementById('statTBU').innerText.replace("↳ ", "");
         
-        const pesan = `*Laporan Status Gizi SIDNA*\n\nNama: *${nama}*\n${umur}\n\n*Hasil Evaluasi WHO 2020*:\n- Berat Badan (BB/U): ${bbu}\n- Tinggi Badan (TB/U): ${tbu}\n\n_Pantau terus tumbuh kembang buah hati bersama SIDNA Ahli Gizi._`;
+        const pesan = `*Laporan Status Gizi SIDNA*\n\nNama: *${nama}*\n${umur}\n\n*Hasil Evaluasi WHO 2020*:\n- Status Utama (BB/TB): ${bbtb}\n- Berat Badan (BB/U): ${bbu}\n- Tinggi Badan (TB/U): ${tbu}\n\n_Pantau terus tumbuh kembang buah hati bersama SIDNA Ahli Gizi._`;
         window.open(`https://wa.me/?text=${encodeURIComponent(pesan)}`, '_blank');
     }
 </script>
